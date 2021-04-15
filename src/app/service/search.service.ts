@@ -11,7 +11,6 @@ import { RestResponse } from '../models/RestResponse';
 export class SearchService {
 
   constructor(private http: HttpClient, private sessionStore: SessionStorageService) { 
-    const  token = this.sessionStore.retrieve('jwt-token');
 
   }
 
