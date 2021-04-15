@@ -1,0 +1,27 @@
+.we-heading{
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+
+
+table {
+    width: 100%;
+    margin-bottom: 0px;
+  }
+  
+  th.mat-sort-header-sorted {
+    color: black;
+  }
+  
+  tr.mat-header-row {
+    height: 40px;
+}
+
+tr.mat-row, tr.mat-footer-row {
+    height: 40px;
+}
+
+.mat-row:hover {
+  background-color: #b78eec;
+}
