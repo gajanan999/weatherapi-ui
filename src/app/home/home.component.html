@@ -1,4 +1,4 @@
-<main class="container justify-content-center text-center">
+<main class="container justify-content-center text-center mb-2">
     <div class="row m-2">
         <div *ngIf="isLoggedIn()" class="col-lg-12">   
             <div class="input-group mt-5 mb-2 w-80">
@@ -36,7 +36,7 @@
                 <div class="card-body">
                   <p class="card-text"><span class="we-heading">Current temperature :</span> {{searchResponse.currentTemperature}} &#8451;</p>
                   <p class="card-text"><span class="we-heading"> Temperature from </span> {{searchResponse.minTemperature}} to {{searchResponse.maxTemperature}} &#8451;</p>
-                  <p class="card-text"><span class="we-heading">Sunrise :</span> {{getDateTime(searchResponse.sunrise)}} <span class="we-heading">  Sunset : </span>{{getDateTime(searchResponse.sunset)}}</p>
+                  <p class="card-text"><span class="we-heading">Sunrise :</span> {{getTime(searchResponse.sunrise)}} <span class="we-heading">  Sunset : </span>{{getTime(searchResponse.sunset)}}</p>
                 </div>
                 <div class="card-footer text-muted">
                     {{getDateTime(searchResponse.dt)}}
@@ -45,44 +45,78 @@
         </div>
     </div>
 
-
+    <div class="row m-3">
+        <div *ngIf="isLoggedIn()" class="col-lg-12 text-right">
+            <button mat-raised-button (click)="deleteSelectedSeachHistoryRow()" color="warn">Delete</button>
+        </div>
+    </div>
     <div class="row m-3">
         <div *ngIf="isLoggedIn()" class="col-lg-12">  
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
             
-                    <!--  User Id Column -->
+                      <!-- Checkbox Column -->
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                                            [checked]="selection.hasValue() && isAllSelected()"
+                                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                            (change)="$event ? selection.toggle(row) : null"
+                                            [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="searchId">
+                        <th class="th-center" mat-header-cell *matHeaderCellDef mat-sort-header> Search Id </th>
+                        <td mat-cell *matCellDef="let element">
+                            <!-- <input type="checkbox" class="custom-control-input" [id]="element.searchId" (change)="onChangeCheckbox($event, element)"> -->
+                             {{element.searchId}}
+                        </td>
+                    </ng-container>
                     <ng-container matColumnDef="cityName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> City Name </th>
+                    <th class="th-center" mat-header-cell *matHeaderCellDef mat-sort-header> City Name </th>
                     <td mat-cell *matCellDef="let element"> {{element.cityName}} </td>
                     </ng-container>
+                    <ng-container matColumnDef="weatherDescription">
+                        <th class="th-center" mat-header-cell *matHeaderCellDef mat-sort-header> Weather Description </th>
+                        <td mat-cell *matCellDef="let element"> {{getWeatherDiscription(element)}} </td>
+                    </ng-container>
                 
-                    <!-- Full Name Column -->
                     <ng-container matColumnDef="currentTemperature">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Current Temperature </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Current Temperature &#8451; </th>
                     <td mat-cell *matCellDef="let element"> {{element.currentTemperature}} </td>
                     </ng-container>
                 
-                    <!-- College Column -->
                     <ng-container matColumnDef="minTemperature">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Min Temperature </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Min Temperature &#8451; </th>
                     <td mat-cell *matCellDef="let element"> {{element.minTemperature}} </td>
                     </ng-container>
                 
-                    <!-- Experience Column -->
                     <ng-container matColumnDef="maxTemperature">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Max Temperature </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Max Temperature &#8451;</th>
                     <td mat-cell *matCellDef="let element"> {{element.maxTemperature}} </td>
                     </ng-container>
+
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                        <td mat-cell *matCellDef="let element"> {{getDate(element.dt)}} </td>
+                    </ng-container>
             
-                    <!-- verificationStatus Column -->
                     <ng-container matColumnDef="sunrise">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Sunrise </th>
-                        <td mat-cell *matCellDef="let element"> {{element.sunrise}} </td>
+                        <td mat-cell *matCellDef="let element"> {{getTime(element.sunrise)}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="sunset">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Sunset </th>
+                        <td mat-cell *matCellDef="let element"> {{getTime(element.sunset)}} </td>
                     </ng-container>
                 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-row [class]=" row.selected == true ? 'grey-color':''" (click)="selectRow(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
                 <mat-paginator #paginator
                                 [length]="length"
@@ -93,4 +127,10 @@
             </div>
         </div>
     </div>
+    <div class="row m-3">
+        <div class="col-lg-12 text-right">
+            
+        </div>
+    </div>
+
 </main>

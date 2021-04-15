@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import {SelectionModel} from '@angular/cdk/collections';
 import { AuthService } from '../service/auth.service';
 import { SearchService } from '../service/search.service';
 import { SearchResponse } from '../models/SearchResponse';
+import { SearchHistoryService } from '../service/search-history.service';
 import { ToastrService } from 'ngx-toastr';
 
 import { UserSearchHistoryService } from '../service/user-search-history.service';
@@ -19,10 +21,11 @@ import {PageEvent} from '@angular/material/paginator';
 })
 export class HomeComponent implements OnInit {
 
-  searchKeyword: string
+  @ViewChild('searchKeyword') searchKeyword: ElementRef
+  selection = new SelectionModel<SearchResponse>(true, []);
   searchResponse: SearchResponse
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  displayedColumns: string[] = ['cityName', 'currentTemperature', 'minTemperature', 'maxTemperature', 'sunrise'];
+  displayedColumns: string[] = ['select','searchId','cityName', 'weatherDescription','currentTemperature', 'minTemperature', 'maxTemperature', 'date','sunrise', 'sunset'];
   dataSource:any
   @ViewChild(MatSort) sort: MatSort;
 
@@ -36,8 +39,9 @@ export class HomeComponent implements OnInit {
   constructor(private authService:AuthService, 
               private searchService: SearchService,
               private toastrService:ToastrService,
-              private userSearchHistoryService:UserSearchHistoryService) {
-    this.searchKeyword = ''
+              private userSearchHistoryService:UserSearchHistoryService,
+              private searchHistoryService:SearchHistoryService) {
+   // this.searchKeyword = ''
     this.dataSource = new MatTableDataSource<SearchResponse>();
    }
 
@@ -107,6 +111,104 @@ export class HomeComponent implements OnInit {
   getDateTime(unixTime:number){
     const date = new Date(unixTime*1000);
     return date. toLocaleString("en-US");
+  }
+
+  getTime(unixTime:number){
+    const date = new Date(unixTime*1000);
+    return date. toLocaleTimeString("en-US");
+  }
+
+  getDate(unixTime:number){
+    const date = new Date(unixTime*1000);
+    return date.toLocaleDateString("en-US");
+  }
+
+  getWeatherDiscription(element:SearchResponse){
+    let description = '';
+    if(element.weather !=null && element.weather != undefined){
+      for(let weather of element.weather){
+        if(description != ''){
+          description = description + ', '
+        }
+        description = description + weather.description
+      }
+
+      if(description != '' &&  element.weather.length>=2)
+        description = description.substr(0,description.length-2)
+    }
+    
+    return description
+
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  handleDeleteKeyboardEvent(event: KeyboardEvent) {
+    if(event.key === 'Enter')
+    {
+      this.search(this.searchKeyword.nativeElement.value)
+    }
+  }
+
+  onChangeCheckbox(event:Event, item:any){
+   
+  }
+
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataSource.data.forEach((row:SearchResponse) =>{
+          this.selection.select(row)
+        } );
+  }
+
+  selectRow(row:SearchResponse){
+    if(this.selection.isSelected(row)){
+      row.selected = false
+      this.selection.deselect(row)
+    }else{
+      row.selected = true
+      this.selection.select(row)
+    }  
+  }
+
+  deleteSelectedSeachHistoryRow(){
+    let searchIds:number[] = []
+    this.selection.selected.forEach(row =>{
+      searchIds.push(row.searchId);
+    })
+    if(searchIds.length !=0){
+      this.searchHistoryService.deleteSearchHistory(searchIds).subscribe(response =>{
+
+
+        if(response.code != 'OK'){
+          this.toastrService.error(response.message, 'Something Went wrong, try later!', {
+            timeOut: 2000,
+          });
+        }else{
+            this.refreshUserSearchHistoryTable()
+            this.selection.clear()
+            this.toastrService.success(response.message, 'Success', {
+              timeOut: 2000,
+            });
+        }
+
+      }, err => {
+            this.toastrService.error(err.message, 'Error', {
+              timeOut: 2000,
+            });
+      })
+    }
+
+
   }
 
   isLoggedIn(){

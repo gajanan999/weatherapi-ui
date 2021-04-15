@@ -12,6 +12,7 @@ export class SearchResponse implements Deserializable{
     sunset: number
     weather : Weather[]
     dt: number
+    selected:boolean
 
     deserialize(input: any): this {
         return Object.assign(this, input);

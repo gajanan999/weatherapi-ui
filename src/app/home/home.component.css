@@ -18,10 +18,23 @@ table {
     height: 40px;
 }
 
+td.mat-cell::ng-deep{
+  text-align: left !important;
+}
+
 tr.mat-row, tr.mat-footer-row {
     height: 40px;
 }
 
 .mat-row:hover {
   background-color: #b78eec;
+}
+
+.mat-checkbox{
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.grey-color{
+  background-color: #b387ec;
 }

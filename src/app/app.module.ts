@@ -21,7 +21,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatTableModule,
     MatSortModule,
     MatFormFieldModule,
+    MatCheckboxModule,
+    MatButtonModule,
 
 
     //Lib-Module
