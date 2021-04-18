@@ -1,12 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import {NgxWebstorageModule} from 'ngx-webstorage';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        NgxWebstorageModule.forRoot(),
+        ReactiveFormsModule
       ],
       declarations: [
         AppComponent
@@ -26,10 +30,17 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('weatherapi-ui');
   });
 
-  it('should render title', () => {
+  // it('should render title', () => {
+  //   const fixture = TestBed.createComponent(AppComponent);
+  //   fixture.detectChanges();
+  //   const compiled = fixture.nativeElement;
+  //   expect(compiled.querySelector('.content span').textContent).toContain('weatherapi-ui app is running!');
+  // });
+
+  it('should have a nav bar',()=>{
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('weatherapi-ui app is running!');
+    expect(compiled.querySelector('.navbar')).toBeTruthy();
   });
 });

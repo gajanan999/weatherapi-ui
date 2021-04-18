@@ -10,6 +10,9 @@ import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+//services
+import {UserSearchHistoryService, AuthService, SearchService, SearchHistoryService} from './service';
+
 //Lib
 import {NgxWebstorageModule} from 'ngx-webstorage';
 import { ToastrModule } from 'ngx-toastr';
@@ -52,7 +55,7 @@ import {MatButtonModule} from '@angular/material/button';
     NgxWebstorageModule.forRoot(), 
     ToastrModule.forRoot()
   ],
-  providers: [],
+  providers: [UserSearchHistoryService, AuthService, SearchService, SearchHistoryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
