@@ -6,5 +6,7 @@ export class Urls {
     public static SEARCH = "/weatherapi/search/"
     public static USER_SEARCH_HISTORY = "/weatherapi/user-search-history?"
     public static DELETE_USER_SEARCH_HISTORY = "/weatherapi/user-search-history/delete"
+    public static UPDATE_USER_SEARCH_HISTORY = "/weatherapi/user-search-history/"
+
 
 }

@@ -4,6 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Urls } from '../urls';
 import { RestResponse } from '../models/RestResponse';
+import { SearchResponse } from '../models/SearchResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +24,14 @@ export class UserSearchHistoryService {
 
   fetchUserSearchHistory(page:number,size:number):Observable<RestResponse>{
 		const httpHeaders = this.getHTTPHeaders();
-    const url = Urls.BASE_URL+Urls.USER_SEARCH_HISTORY+"page="+page+"&size="+size
+    	const url = Urls.BASE_URL+Urls.USER_SEARCH_HISTORY+"page="+page+"&size="+size
 		return this.http.get<RestResponse>(url,{   headers: httpHeaders,});
 
+	}
+
+	updateUserSearchHistory(searchResponse : SearchResponse){
+		const httpHeaders = this.getHTTPHeaders();
+    	const url = Urls.BASE_URL+Urls.UPDATE_USER_SEARCH_HISTORY
+		return this.http.put<RestResponse>(url, searchResponse, { headers: httpHeaders,});
 	}
 }

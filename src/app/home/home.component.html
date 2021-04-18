@@ -11,23 +11,12 @@
     <div class="row">
         <div class="col-lg-12 d-flex justify-content-center text-center">
             <div *ngIf="!isLoggedIn()" class="card p-3" style="width: 18rem;">
-                <!-- <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(70).jpg" class="card-img-top" alt="..."> -->
-
                 <div class="card-body">
                 <h5 class="card-title">Please Login</h5>
                 <p class="card-text">So you will be able to search the weather data for cities</p>
                 <a [routerLink]="['/login']" class="btn btn-primary">Go to Login</a>
                 </div>
             </div>
-            <!-- <div *ngIf="isLoggedIn() && searchResponse!=null && searchResponse!=undefined" class="card p-3" style="width: 18rem;">
-               <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(70).jpg" class="card-img-top" alt="..."> 
-
-                <div class="card-body">
-                <h1 class="card-title">{{searchResponse.cityName}}</h1>
-                <p class="card-text">So you will be able to search the weather data for cities</p>
-                <a [routerLink]="['/login']" class="btn btn-primary">Go to Login</a>
-                </div>
-            </div> -->
 
             <div class="card text-center" *ngIf="isLoggedIn() && searchResponse!=null && searchResponse!=undefined">
                 <div class="card-header">
@@ -45,13 +34,14 @@
         </div>
     </div>
 
-    <div class="row m-3">
+    <div class="row m-3" *ngIf="shouldShowTable()">
         <div *ngIf="isLoggedIn()" class="col-lg-12 text-right">
-            <button mat-raised-button (click)="deleteSelectedSeachHistoryRow()" color="warn">Delete</button>
+            <button class="btn btn-danger m-1" (click)="deleteSelectedSeachHistoryRow()">Delete</button>
+            <button class="btn btn-primary" (click)="editSelectedSeachHistoryRow()">Edit  </button>
         </div>
     </div>
     <div class="row m-3">
-        <div *ngIf="isLoggedIn()" class="col-lg-12">  
+        <div *ngIf="isLoggedIn() && shouldShowTable()" class="col-lg-12">  
             <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
             
@@ -132,5 +122,109 @@
             
         </div>
     </div>
-
 </main>
+
+<div  class="modal" id="myModal" [style.display]="showModal ? 'block' : 'none'" >
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+
+        
+      
+        <!-- Modal Header -->
+        <div class="modal-header d-flex text-center">
+          <h3 class="modal-title">City Name</h3>
+          <span class="search-history-heading"><h3>{{selectedUserSearchHistory.cityName}}</h3></span>
+          <button type="button" class="close" data-dismiss="modal" (click) = "hide()">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form id="userSearchHistoryForm" [formGroup]="userSearchHistoryForm">
+            <div class="container-fluid">
+                <div class="row m-1">
+                    <div class="col-lg-6 d-flex">
+                        <div class="col-lg-6">
+                            <label class="h-label">Search Id</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="h-input" formControlName="searchId" ReadOnly type="text" value="{{selectedUserSearchHistory.searchId}}" style="border: 0;">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 d-flex">
+                        <div class="col-lg-6">
+                            <label class="h-label">City Name</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="h-input" formControlName="cityName" type="text" value="{{selectedUserSearchHistory.cityName}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-1">
+                    <div class="col-lg-6 d-flex">
+                        <div class="col-lg-6">
+                            <label class="h-label">Weather Description</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="h-input" formControlName="weatherDes" type="text" value="{{getWeatherDiscription(selectedUserSearchHistory)}}">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 d-flex">
+                        <div class="col-lg-6">
+                            <label class="h-label">Current Temperature</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="h-input" formControlName="currentTemperature" type="text" pattern="[\d]*.?[\d]*" value="{{selectedUserSearchHistory.currentTemperature}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-1">
+                    <div class="col-lg-6 d-flex">
+                        <div class="col-lg-6">
+                            <label class="h-label">Minimum Temperature</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="h-input" formControlName="minTemperature" type="text" pattern="[\d]*.?[\d]*" value="{{selectedUserSearchHistory.minTemperature}}">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 d-flex">
+                        <div class="col-lg-6">
+                            <label class="h-label">Maximum Temperature</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="h-input" formControlName="maxTemperature" pattern="[\d]*.?[\d]*" type="text" value="{{selectedUserSearchHistory.maxTemperature}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-1">
+                    <div class="col-lg-6 d-flex">
+                        <div class="col-lg-6">
+                            <label class="h-label">Sunrise</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="h-input" formControlName="sunrise" type="text" pattern="((1[0-2]|0?[1-9]):([0-5][0-9]):([0-5][0-9]) ?([AaPp][Mm]))" value="{{getTime(selectedUserSearchHistory.sunrise)}}">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 d-flex">
+                        <div class="col-lg-6">
+                            <label class="h-label">Sunset</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <input class="h-input" formControlName="sunset" type="text" pattern="((1[0-2]|0?[1-9]):([0-5][0-9]):([0-5][0-9]) ?([AaPp][Mm]))" value="{{getTime(selectedUserSearchHistory.sunset)}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click) = "hide()">Close</button>
+          <button type="button" class="btn btn-success" (click) = "saveUserSearchHistory()">Save</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+

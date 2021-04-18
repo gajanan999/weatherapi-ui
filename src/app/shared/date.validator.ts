@@ -1,5 +1,6 @@
 import { AbstractControl } from '@angular/forms';
 import  moment  from 'moment';
+import { FormControl } from "@angular/forms";
 
 export class DateValidator {
   static dateVaidator(AC: AbstractControl) {
@@ -8,4 +9,12 @@ export class DateValidator {
     }
     return null;
   }
+
+  static timeVaidator(AC: AbstractControl) {
+    if (AC && AC.value && AC.value.match("/((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))/")) {
+      return { 'timeVaidator': true };
+    }
+    return null;
+  }
+  //    
 }

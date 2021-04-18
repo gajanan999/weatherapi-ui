@@ -3,6 +3,9 @@
     font-weight: 500;
 }
 
+.mat-elevation-z8{
+  overflow: auto;
+}
 
 
 table {
@@ -37,4 +40,58 @@ tr.mat-row, tr.mat-footer-row {
 
 .grey-color{
   background-color: #b387ec;
+}
+
+
+.modal {
+  width: 70%;
+  top: 4rem;
+  left: 15%;
+  height: auto;
+  max-height: 25.5rem;
+}
+
+.modal-dialog{
+  height:calc(100% - 60px);
+}
+
+.modal-header{
+  background-color: #ddd3ef;
+}
+.modal-content{
+  height:100%;
+}
+.modal .modal-content{
+  overflow:hidden;
+}
+.modal-body{
+  height:calc(100% - 125px);
+  overflow-y: scroll;
+}
+
+.search-history-heading{
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+.search-history-heading h3 {
+  font-weight: 500;
+}
+.element{
+  display: inline-flex;
+}
+
+.element .h-label{
+  margin: 0.25rem;
+}
+.element .h-input{
+  margin: 0.25rem;
+}
+
+.h-label{
+  margin: 0.25rem;
+}
+.h-input{
+  margin: 0.25rem;
+  border-radius: 4px;
+  border-color: #e6e2e2;
 }
