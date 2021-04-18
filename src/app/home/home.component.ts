@@ -10,7 +10,6 @@ import {UserSearchHistoryService, AuthService, SearchService, SearchHistoryServi
 
 //utils
 import { Utils } from '../shared/utils';
-import {DateValidator} from '../shared/date.validator';
 
 
 //Material
