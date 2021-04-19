@@ -34,4 +34,17 @@ describe('LoginComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should be able to login', () => {
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement;
+    spyOn(component,'onLogin').and.callFake(function(){});
+    compiled.querySelector('#username').innerHtml = "admin"
+    compiled.querySelector('#password').innerHtml = "admin"
+    compiled.querySelector('#signInBtn').click()
+    fixture.detectChanges();
+    expect(component.onLogin).toHaveBeenCalled();
+
+  });
+ 
 });

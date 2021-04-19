@@ -164,8 +164,15 @@ export class HomeComponent implements OnInit {
   }
 
   editSelectedSeachHistoryRow(){
-      if(this.selection.selected.length >1){
-        this.toastrService.warning('You can edit only one row at a time', 'Error', {
+      if(this.selection.selected.length <=0){
+        this.toastrService.warning('Please select the record first', 'Error', {
+          timeOut: 2000,
+        });
+        this.showModal =false
+        this.clearSelection()
+        return
+      }else if(this.selection.selected.length >1){
+        this.toastrService.warning('You can edit only one record at a time', 'Error', {
           timeOut: 2000,
         });
         this.showModal =false
@@ -218,6 +225,12 @@ export class HomeComponent implements OnInit {
       }
       if(controlName == 'weatherDes'){
         this.selectedUserSearchHistory.weather[0].description=controls[controlName].value
+      }
+      if(controlName == 'sunrise'){
+        this.selectedUserSearchHistory.sunrise = this.getUnitTime(this.selectedUserSearchHistory.dt, controls[controlName].value)
+      }
+      if(controlName == 'sunset'){
+        this.selectedUserSearchHistory.sunset = this.getUnitTime(this.selectedUserSearchHistory.dt, controls[controlName].value)
       }
     });
     
@@ -337,6 +350,14 @@ export class HomeComponent implements OnInit {
 
   getDate(unixTime:number){
     return Utils.getDate(unixTime)
+  }
+
+  getUnitTime(date : number, time:string){
+    let dateString = this.getDate(date);
+    let fullDate = dateString +" "+ time;
+    let modifiedDate = new Date(fullDate)
+    let unixTime = modifiedDate.getTime()/1000
+    return unixTime
   }
 
   showErrorToastr(err:HttpErrorResponse){

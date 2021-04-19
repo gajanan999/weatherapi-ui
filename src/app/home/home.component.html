@@ -2,7 +2,7 @@
     <div class="row m-2">
         <div *ngIf="isLoggedIn()" class="col-lg-12">   
             <div class="input-group mt-5 mb-2 w-80">
-                <input type="search" #searchKeyword class="form-control rounded mr-1" placeholder="Search for the City" aria-label="Search"
+                <input type="search" id="search" #searchKeyword class="form-control rounded mr-1" placeholder="Search for the City" aria-label="Search"
                   aria-describedby="search-addon" />
                 <button type="button" (click)="search(searchKeyword.value)" class="btn btn-outline-primary">search</button>
               </div>              
