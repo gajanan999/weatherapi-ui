@@ -27,7 +27,7 @@ export class SearchHistoryService {
     let deleteRequest = {
       "searchIds" : searchIds
     }
-		return this.http.post<RestResponse>(Urls.BASE_URL+Urls.DELETE_USER_SEARCH_HISTORY,deleteRequest,{   headers: httpHeaders,});
+		return this.http.post<RestResponse>(Urls.BASE_URL+Urls.DELETE_USER_SEARCH_HISTORY,deleteRequest);
 	}
 
 }

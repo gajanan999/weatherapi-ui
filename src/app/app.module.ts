@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -26,12 +26,16 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatButtonModule} from '@angular/material/button';
+import { ProductsComponent } from './products/products.component';
+import { AuthGuard } from './auth.guard';
+import { HeaderInterceptor } from './service/header.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    ProductsComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +59,9 @@ import {MatButtonModule} from '@angular/material/button';
     NgxWebstorageModule.forRoot(), 
     ToastrModule.forRoot()
   ],
-  providers: [UserSearchHistoryService, AuthService, SearchService, SearchHistoryService],
+  providers: [UserSearchHistoryService, AuthService, SearchService, SearchHistoryService, AuthGuard,
+    { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

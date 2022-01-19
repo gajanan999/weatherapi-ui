@@ -26,7 +26,7 @@ export class SearchService {
   
 	searchForWeatherConditionInCity(cityName:string):Observable<RestResponse>{
 		const httpHeaders = this.getHTTPHeaders();
-		return this.http.get<RestResponse>(Urls.BASE_URL+Urls.SEARCH+cityName,{   headers: httpHeaders,});
+		return this.http.get<RestResponse>(Urls.BASE_URL+Urls.SEARCH+cityName);
 
 	}
 

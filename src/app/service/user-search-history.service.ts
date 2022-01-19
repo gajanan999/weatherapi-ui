@@ -25,13 +25,13 @@ export class UserSearchHistoryService {
   fetchUserSearchHistory(page:number,size:number):Observable<RestResponse>{
 		const httpHeaders = this.getHTTPHeaders();
     	const url = Urls.BASE_URL+Urls.USER_SEARCH_HISTORY+"page="+page+"&size="+size
-		return this.http.get<RestResponse>(url,{   headers: httpHeaders,});
+		return this.http.get<RestResponse>(url);
 
 	}
 
 	updateUserSearchHistory(searchResponse : SearchResponse){
 		const httpHeaders = this.getHTTPHeaders();
     	const url = Urls.BASE_URL+Urls.UPDATE_USER_SEARCH_HISTORY
-		return this.http.put<RestResponse>(url, searchResponse, { headers: httpHeaders,});
+		return this.http.put<RestResponse>(url, searchResponse);
 	}
 }

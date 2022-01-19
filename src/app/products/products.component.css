@@ -1,0 +1,18 @@
+
+
+ .carousel-inner {
+    color: black;
+  }
+
+.carousel-item{
+    background-color: burlywood;
+    align-items: center;
+}
+
+  .carousel-indicators.li{
+      color:blueviolet;
+  }
+
+.carousel-control-prev{
+    color: brown;
+}
